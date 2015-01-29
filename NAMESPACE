@@ -1,5 +1,5 @@
 #exportPattern("^[[:alpha:]]+")
-exportMethods( plot, plotDensity, sampleBam, table )
+exportMethods( overview, plot, plotDensity, sampleBam, table )
 export( "summarizeAlignment" )
 
 import( methods )

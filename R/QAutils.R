@@ -1,3 +1,13 @@
+if( !isGeneric( "overview", ) )
+    setGeneric( "overview", function( x, ... )
+               standardGeneric( "overview" ))
+setMethod( "overview", "QA", function( x, ... ){
+    df <- as( values( x@src ), "data.frame" )
+    return( df )
+} )
+
+
+
 #########################################
 ##
 ##   Distribution of average read quality.

@@ -1,6 +1,9 @@
 \name{plot}
 \Rdversion{1.1}
 \docType{methods}
+\alias{overview}
+\alias{overview,ANY}
+\alias{overview,QA}
 \alias{plot}
 \alias{plot,ANY}
 \alias{plot,QAReadQuality-method}
@@ -24,6 +27,8 @@
   \code{ShortRead} package.
 }
 \usage{
+
+\S4method{overview}{QA}( x, ... )
 
 \S4method{plot}{QAReadQuality}(x, y, ... )
 
@@ -96,6 +101,12 @@ ylab="density", col, pal=brewer.pal( 8, "Set1" ), lty=1, ... )
 }
 \section{Methods and Functions}{
   \describe{
+
+    \item{overview}{
+      Returns a \code{data.frame} with some information about the
+      analyzed fastq files.
+    }
+
     \item{plot}{
       Creates a plot summarizing the quality information from the
       corresponding QA object (see \code{\link[ShortRead]{qa2}} for a
@@ -156,6 +167,10 @@ coll <- QACollate(
 ## perform the quality control
 qualy <- qa2( coll, verbose = TRUE )
 
+
+############
+## overview
+overview( qualy )
 
 ############
 ## distribution of average base call quality per read

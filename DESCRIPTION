@@ -1,7 +1,7 @@
 Package: SeqUtils
 Type: Package
 Title: Utility functions for high throughput sequencing
-Version: 0.0.1
+Version: 0.0.2
 Author: J. Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
 Imports: Rsamtools, GenomePlotR, RColorBrewer, S4Vectors, ShortRead, grid, lattice

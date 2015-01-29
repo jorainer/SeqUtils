@@ -1,4 +1,4 @@
-#+TITLE:makeEnsemblDb: make an annotation package from Ensembl
+#+TITLE:SeqUtils: some utility functions for sequencing data analysis
 #+AUTHOR: Johannes Rainer
 #+email: johannes.rainer@i-med.ac.at
 #+OPTIONS: ^:{}
@@ -27,77 +27,9 @@
 #+LATEX_HEADER: \makeatother
 -----
 
-* =makeEnsemblDb=: make an annotation data base from Ensembl.
+* =SeqUtils=: utility functions for the analysis of sequencing data.
 
-This package allows to generate an SQLite based annotation database for a user defined species extracted from the Ensembl database.
-
-A simple example to create such an database for all human genes defined in Ensembl version 75 is:
-
-#+BEGIN_SRC R :results silent :exports code :eval never
-  library( makeEnsemblDb )
-
-  ## get all human gene/transcript/exon annotations from Ensembl (75)
-  ## the resulting tables will be stored by default to the current working
-  ## directory
-  fetchTablesFromEnsembl( 75, ensemblapi="/home/bioinfo/ensembl/75/API/ensembl/modules",
-                         species="human" )
-
-  ## These tables can then be processed to generate a SQLite database
-  ## containing the annotations
-  DBFile <- makeSQLiteFromTables()
-
-  ## and finally we can generate the package
-  makeEnsemblDbPackage( ensdb=DBFile, version="0.0.1", maintainer="Johannes Rainer <johannes.rainer@eurac.edu>",
-                       author="J Rainer" )
-
-#+END_SRC
-
-This package can then be installed (e.g. using =R CMD INSTALL Hsapiens.Ensembl75=) and used to retrieve annotations:
-
-#+BEGIN_SRC R :results silent :exports code :eval never
-  library( Hsapiens.Ensembl75 )
-
-  ## show some information from the database:
-  Hsapiens.Ensembl75
-
-  ## get all annotations for genes encoded on chromosome Y:
-  genes( Hsapiens.Ensembl75, filter=list( SeqnameFilter( "Y" ) ) )
-
-#+END_SRC
+This package provides some additional functionality for the visualization and processing of HTS data.
 
 For more details refer to the help pages of the package in =R=.
 
-** Requirements
-
-The package uses the Ensembl Perl API to retrieve the required annotations from an Ensembl database (e.g. from the main site /ensembldb.ensembl.org/). Thus, it is required the Ensembl Perl API to be installed, along with Bioperl.
-
-
-** TODOs							   :noexport:
-
-*** DONE Make the perl script to retrieve all tables from Ensembl
-    CLOSED: [2015-01-21 Wed 08:24]
-    - State "DONE"       from "TODO"       [2015-01-21 Wed 08:24]
-
-- [ ] Including the species name.
-- [ ] Build an R-wrapper that can be used to call this script.
-- [ ] Output should be a SQLite database.
-
-*** DONE Document all functions.
-    CLOSED: [2015-01-21 Wed 08:24]
-    - State "DONE"       from "TODO"       [2015-01-21 Wed 08:24]
-
-*** DONE Implement an API to retrieve annotations easily from within R
-    CLOSED: [2015-01-26 Mon 17:08]
-    - State "DONE"       from "TODO"       [2015-01-26 Mon 17:08]
-
-Results should be returned either as a =data.frame= or as a =IRanges= type of information (with eventual additional columns).
-
-- [X] connect to the database.
-- [X] get all annotations for a gene.
-- [X] exonsBy returning the same classes than returned by TxDb.
-
-*** DONE Implement a function to build a package based on the retrieved information.
-    CLOSED: [2015-01-21 Wed 08:24]
-    - State "DONE"       from "TODO"       [2015-01-21 Wed 08:24]
-
-- Should use the sqlite database (or the txt files) generated above.
