@@ -1,0 +1,4 @@
+##
++ version 0.0.1: 2015-01-28:
+  - summarizeAlignment, sampleBam.
+  - chunkSummary: split Rle in chunks and apply FUN to chunks.
