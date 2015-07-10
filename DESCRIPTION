@@ -1,12 +1,15 @@
 Package: SeqUtils
 Type: Package
 Title: Utility functions for high throughput sequencing
-Version: 0.0.2
+Version: 0.0.4
 Author: J. Rainer
 Maintainer: Johannes Rainer <johannes.rainer@eurac.edu>
-Imports: Rsamtools, GenomePlotR, RColorBrewer, S4Vectors, ShortRead, grid, lattice
-Depends: methods, ShortRead, S4Vectors
-Description: This package provides some utility functions for the processing of sequencing data which complement the functionality of other packages handling such data.
+Imports: BiocGenerics, Rsamtools, GenomePlotR, RColorBrewer, grid, lattice
+Depends: methods, ShortRead, S4Vectors, SummarizedExperiment
+Suggests: RUnit
+Description: This package provides some utility functions for the processing
+	     of sequencing data which complement the functionality of other
+	     packages handling such data.
 License: LGPL
 biocViews: Genetics
 

@@ -4,7 +4,7 @@
 ## sum of reads with NH>1 -> multiple alignments; count only those with HI==1 (first alignment)
 ## mapq of the 3 categories above.
 ## flag summaries of the 3 categories above.
-summarizeAlignment <- function( x, index=character(), sbp=ScanBamParam( what=c( "flag", "mapq" ), tag=c( "NH", "HI" ) ), yieldSize=1e+6, v=FALSE ){
+summarizeAlignment <- function( x, index=character(), sbp=ScanBamParam( what=c( "flag", "mapq" ), tag=c( "NH", "HI", "XS" ) ), yieldSize=1e+6, v=FALSE ){
     ## open the bamfile.
 
     stream <- open( BamFile( x, index=index, obeyQname=TRUE, yieldSize=yieldSize ) )
@@ -27,6 +27,8 @@ summarizeAlignment <- function( x, index=character(), sbp=ScanBamParam( what=c( 
     counts.ua <- 0
     counts.ma <- 0
     counta <- 0
+    countxs <- 0
+    tag <- sbp@tag
     repeat{
         res <- scanBam( stream, param=sbp )
         if( length( res[[1]]$flag ) == 0 )
@@ -65,13 +67,27 @@ summarizeAlignment <- function( x, index=character(), sbp=ScanBamParam( what=c( 
             MAPQ.na[ as.character( names( MAPQ.bam ) ), 1 ] <- MAPQ.na[ as.character( names( MAPQ.bam ) ), 1 ] + as.numeric( MAPQ.bam )
             counts.na <- counts.na + sum( bm )
         }
+        ## XS?
+        if( any( tag=="XS" ) ){
+            ## just count how many reads have XS not NA
+            if( any( names( res[[1]]$tag )=="XS" ) & !is.null( res[[1]]$tag$XS ) ){
+                bm <- !is.na( res[[1]]$tag$XS )
+                countxs <- countxs + sum( bm )
+            }
+        }
         counta <- counta + length( res[[1]]$flag )
-        if( v )
-            cat( paste0( "processed ", counta, " entries (", counts.na, ", ", counts.ua, ", ", counts.ma ,") number of (no-, unique, multi) aligned reads)\n" ) )
+        if( v ){
+            cat( paste0( "processed ", counta, " entries (", counts.na, ", ", counts.ua, ", ", counts.ma ,") number of (no-, unique, multi) aligned reads)" ) )
+            if( any( tag=="XS" ) )
+                cat( " spliced_algns: ", countxs )
+            cat( "\n" )
+        }
     }
-    return( list( flag=list( no_algn=FC.na, unique_algn=FC.ua, multi_algn=FC.ma ),
+    Reslist <- list( flag=list( no_algn=FC.na, unique_algn=FC.ua, multi_algn=FC.ma ),
                  mapq=list( no_algn=MAPQ.na, unique_algn=MAPQ.ua, multi_algn=MAPQ.ma ),
-                 counts=list( no_algn=counts.na, unique_algn=counts.ua, multi_algn=counts.ma ))
-           )
+                    counts=list( no_algn=counts.na, unique_algn=counts.ua, multi_algn=counts.ma ))
+    if( any( tag=="XS" ) )
+        Reslist$counts <- c( Reslist$counts, spliced_algn=countxs )
+    return( Reslist )
 }
 

@@ -28,33 +28,34 @@
 }
 \usage{
 
-\S4method{overview}{QA}( x, ... )
+\S4method{overview}{QA}(x, ...)
 
-\S4method{plot}{QAReadQuality}(x, y, ... )
+\S4method{plot}{QAReadQuality}(x, y, subset=NULL, ...)
 
 \S4method{plot}{QANucleotideByCycle}(x, y, dnaCol=c("#1F78B4",
-"#33A02C", "#B2DF8A", "#A6CEE3", "#E31A1C"), ... )
+"#33A02C", "#B2DF8A", "#A6CEE3", "#E31A1C"), subset=NULL, ...)
 
-\S4method{plot}{QAQualityByCycle}(x, y, type="levelplot", ... )
+\S4method{plot}{QAQualityByCycle}(x, y, type="levelplot", subset=NULL, ...)
 
 \S4method{plot}{QANucleotideUse}(x, y, dnaCol=c("#1F78B4", "#33A02C",
-"#B2DF8A", "#A6CEE3", "#E31A1C"), ...)
+"#B2DF8A", "#A6CEE3", "#E31A1C"), subset=NULL, ...)
 
-\S4method{plot}{QAQualityUse}( x, y, ... )
+\S4method{plot}{QAQualityUse}(x, y, subset=NULL, ...)
 
-\S4method{plot}{QASequenceUse}( x, y, ... )
+\S4method{plot}{QASequenceUse}(x, y, ...)
 
-\S4method{plotDensity}{QAQualityUse}( x, xlab="Used base-call quality",
-ylab="density", col, pal=brewer.pal( 8, "Set1" ), lty=1, ... )
+\S4method{plotDensity}{QAQualityUse}(x, xlab="Used base-call quality",
+ylab="density", col, pal=brewer.pal(8, "Set1"), lty=1, subset=NULL, ...)
 
-\S4method{table}{QANucleotideUse}( x, ... )
+\S4method{table}{QANucleotideUse}(x, ...)
 
-\S4method{table}{QAFrequentSequence}( x, ... )
+\S4method{table}{QAFrequentSequence}(x, ...)
 
-\S4method{table}{QAAdapterContamination}( x, ... )
+\S4method{table}{QAAdapterContamination}(x, ...)
 
 }
 \arguments{
+  (in alphabetic order)
 
   \item{...}{
     Additional arguments.
@@ -72,15 +73,22 @@ ylab="density", col, pal=brewer.pal( 8, "Set1" ), lty=1, ... )
     For \code{plotDensity}: the line type.
   }
 
+  \item{pal}{
+    Vector of colors that can be used to define the colors for the
+    individual sequencing runs. Colors might be recycled.
+  }
+
+  \item{subset}{
+    Generate the plot for a subset of data. Argument \code{subset} has
+    to be a numeric vector with the indices of the files for which the
+    plot should be generated. The default will generate the plot for all
+    files.
+  }
+
   \item{type}{
     For \code{QAQualityByCycle}: allowed values: \code{"levelplot"} and
     \code{"boxplot"}. If the base call quality information
     per cycle should be visualized as a levelplot or boxplot.
-  }
-
-  \item{pal}{
-    Vector of colors that can be used to define the colors for the
-    individual sequencing runs. Colors might be recycled.
   }
 
   \item{x}{
@@ -149,12 +157,12 @@ ylab="density", col, pal=brewer.pal( 8, "Set1" ), lty=1, ... )
 ## Examples:
 ##
 ## Perform a quality assessment on a fastq file:
-dirpath <- system.file( package="SeqUtils", "extdata" )
-fastqs <- dir( dirpath, "example.fastq.gz", full=TRUE )
+dirpath <- system.file(package="SeqUtils", "extdata")
+fastqs <- dir(dirpath, "example.fastq.gz", full=TRUE)
 
 ## collating the quality controls:
 coll <- QACollate(
-    QAFastqSource( con=fastqs, n=10e+06 ),
+    QAFastqSource(con=fastqs, n=10e+06),
     QAReadQuality(),
     QAAdapterContamination(),
     QANucleotideUse(),
@@ -163,60 +171,60 @@ coll <- QACollate(
     QAFrequentSequence(n=10),
     QANucleotideByCycle(),
     QAQualityByCycle()
-    )
+   )
 ## perform the quality control
-qualy <- qa2( coll, verbose = TRUE )
+qualy <- qa2(coll, verbose = TRUE)
 
 
 ############
 ## overview
-overview( qualy )
+overview(qualy)
 
 ############
 ## distribution of average base call quality per read
-plot( qualy$QAReadQuality )
+plot(qualy$QAReadQuality)
 
 
 ############
 ## nucleotide quality by cycle:
-plot( qualy$QANucleotideByCycle )
+plot(qualy$QANucleotideByCycle)
 
 
 ###########
 ## base call quality by cycle
-plot( qualy$QAQualityByCycle )
-plot( qualy$QAQualityByCycle, type="boxplot" )
+plot(qualy$QAQualityByCycle)
+plot(qualy$QAQualityByCycle, type="boxplot")
 
 
 ###########
 ## nucleotide use
-plot( qualy$QANucleotideUse )
+plot(qualy$QANucleotideUse)
 
 ## in addition return the table with the actual values (and percentages)
-table( qualy$QANucleotideUse )
+table(qualy$QANucleotideUse)
 
 
 ##########
 ## base call quality use
-plot( qualy$QAQualityUse )
+plot(qualy$QAQualityUse)
 
 ## plot the base call quality as density distributions
-plotDensity( qualy$QAQualityUse )
+plotDensity(qualy$QAQualityUse)
 
 
 ##########
 ## sequence use
-plot( qualy$QASequenceUse )
+plot(qualy$QASequenceUse)
 
 
 #########
 ## frequent sequence
-table( qualy$QAFrequentSequence )
+table(qualy$QAFrequentSequence)
 
 
 #########
 ## adapter contamination
-table( qualy$QAAdapterContamination )
+table(qualy$QAAdapterContamination)
 
 
 }

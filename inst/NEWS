@@ -1,0 +1,18 @@
+CHANGES IN VERSION 0.0.4
+------------------------
+
+NEW FEATURES
+
+    o Method reduce for SummarizedExperiment0 and RangedSummarizedExperiment
+      that allows to aggregate/merge assay values for replicated measurements.
+
+
+
+CHANGES IN VERSION 0.0.3
+------------------------
+
+SIGNIFICANT USER-VISIBLE CHANGES
+
+    o Argument subset added to plot method for QAQualityByCycle
+      allowing to draw the plot only for specific files instead
+      of all.
